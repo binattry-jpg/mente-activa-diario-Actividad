@@ -1,0 +1,26 @@
+import React, { useState } from 'react';
+
+function RegistroEmocion() {
+  const [nota, setNota] = useState('');
+  
+  const guardar = () => {
+    // Aquí conectarías con tu API de Node.js
+    console.log("Emoción guardada con nota:", nota);
+    alert("¡Registro exitoso!");
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2>¿Cómo te sientes hoy?</h2>
+      <select>
+        <option>Feliz</option>
+        <option>Estresado</option>
+        <option>Ansioso</option>
+      </select>
+      <textarea onChange={(e) => setNota(e.target.value)} placeholder="Añade una nota..." />
+      <button onClick={guardar}>Guardar en mi diario</button>
+    </div>
+  );
+}
+
+export default RegistroEmocion;
