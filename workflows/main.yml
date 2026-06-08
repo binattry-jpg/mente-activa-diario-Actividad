@@ -1,0 +1,39 @@
+name: CI/CD Pipeline Mente Activa
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        
+    - name: Install Backend Dependencies
+      run: cd server && npm install
+      
+    - name: Run Backend Tests & Coverage
+      run: cd server && npm run test -- --coverage
+      
+    - name: Install Frontend Dependencies
+      run: cd client && npm install
+      
+    - name: Run Frontend Linting
+      run: cd client && npm run lint
+
+  deploy-backend:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to Render
+        # Necesitas configurar tu RENDER_DEPLOY_HOOK en los Secrets de GitHub
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
